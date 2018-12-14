@@ -98,12 +98,20 @@ void parseAndSortFile(string fname)
         }
     }
 
+    int freq_min = -1;
+    int freq_val = -1;
+    int freq_guard = -1;
 
     for (auto it = hist.begin(); it != hist.end(); it++) {
         int key = it->first;
         cout << key << " < ";
         for (int i=0; i<60; i++) {
             cout << hist[key][i] << " ";
+            if (hist[key][i] > freq_val) {
+                freq_val = hist[key][i];
+                freq_guard = key;
+                freq_min = i;
+            }
         }
         cout << " > " << asleep_total[key] << endl;
     }
@@ -126,4 +134,6 @@ void parseAndSortFile(string fname)
     cout << "This many loops: " << count << endl;
     cout << "Best minute = " << best_min << endl;
     cout << "guard*min: " << best_min * guard << endl;
+
+    cout << "Guard: " << freq_guard << " was most frequent at " << freq_min << ". g*m = " << freq_guard * freq_min << endl;
 }
