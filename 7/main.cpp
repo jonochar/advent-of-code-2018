@@ -4,8 +4,20 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <queue>
+#include <stack>
 
 using namespace std;
+
+void handleEvents(stack <char>* st, map<char, map<char> >* graph, vector<char>* events, char cur)
+{
+    if ((*graph)[cur].empty()) {
+        st->push(cur);
+        return;
+    }
+
+    
+}
 
 int main()
 {
@@ -14,8 +26,9 @@ int main()
 
     int actionIdx, prereqIdx, i;
     char action = 7, prereq = 1, step; //this only works because of pre-knowledge of the file format
-    map<char, map<char, int> > prereqs, unlocks;
+    map<char, map<char> > prereqs, unlocks;
     vector<char> events;
+    queue <char> q;
 
     if (f.is_open()) {
         i=0;
@@ -26,13 +39,11 @@ int main()
                 if (i == prereqIdx) prereq = word[0];
                 i++;
             }
-            unlocks[prereq][action]++;
-            prereqs[action][prereq]++;
+            unlocks[prereq].insert(action);
+            prereqs[action].insert(prereq);
             if (prereqs[action].size() == 0) step = prereq;
         }
     }
-
-    while (!unlocks.empty()) {
-        events.push_back(step);
-    }
+    stack<char> st;
+    handleEvents(&st, &unlocks, &events);
 }
